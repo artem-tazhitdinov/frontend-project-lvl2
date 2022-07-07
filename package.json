@@ -21,9 +21,11 @@
   },
   "homepage": "https://github.com/artem-tazhitdinov/frontend-project-lvl2#readme",
   "dependencies": {
-    "commander": "^9.3.0"
+    "commander": "^9.3.0",
+    "path": "^0.12.7"
   },
   "devDependencies": {
+    "@types/node": "^18.0.3",
     "eslint": "^8.19.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.26.0"
