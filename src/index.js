@@ -14,8 +14,8 @@ const genDiff = (filepath1, filepath2) => {
   const objectOne = JSON.parse(fs.readFileSync(firstFilePath, 'utf-8'));
   const objectTwo = JSON.parse(fs.readFileSync(secondFilePath, 'utf-8'));
 
-  console.log(objectOne);
-  console.log(objectTwo);
+  const result = [objectOne, objectTwo];
+  return result;
 };
 
 export default genDiff;
