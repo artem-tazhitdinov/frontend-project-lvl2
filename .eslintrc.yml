@@ -10,5 +10,6 @@ rules: {
   "no-console": "off",
   "import/prefer-default-export": "off",
   "import/extensions": "off",
-  "no-restricted-syntax": "off"
+  "no-restricted-syntax": "off",
+  no-underscore-dangle: [2, { "allow": ["__filename", "__dirname"] }]
 }
