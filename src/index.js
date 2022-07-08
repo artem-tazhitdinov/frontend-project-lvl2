@@ -4,16 +4,17 @@ import fs from 'fs';
 
 import _ from 'lodash';
 
-const getFilePath = (cliArgument, fileName) => {
+const getFileName = (cliArgument) => path.parse(cliArgument).base;
+
+const getFilePath = (cliArgument) => {
+  const fileName = getFileName(cliArgument);
   const currentPath = process.cwd();
   return path.resolve(currentPath, path.parse(cliArgument).dir, fileName);
 };
 
-const getFileName = (filepath) => path.parse(filepath).base;
-
-const createObject = (filepath) => {
-  const fileName = getFileName(filepath);
-  const filePath = getFilePath(filepath, fileName);
+const createObject = (file) => {
+  const fileName = getFileName(file);
+  const filePath = getFilePath(file, fileName);
   return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 };
 
