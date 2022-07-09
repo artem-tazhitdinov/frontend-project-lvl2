@@ -21,6 +21,15 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
+      - name: Install
+        run: make install
+
+      - name: Run linter
+        run: make lint
+
+      - name: Run tests  
+        run: make test
+
       - name: Test & publish code coverage
         uses: paambaati/codeclimate-action@v3.0.0
         env: 
@@ -28,10 +37,3 @@ jobs:
         with: 
           coverageCommand: make test-coverage
           debug: true
-
-      - name: Install
-        run: make install
-      - name: Run Linter
-        run: make lint
-      - name: Run Jest  
-        run: make test
