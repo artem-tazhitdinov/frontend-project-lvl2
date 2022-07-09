@@ -1,19 +1,20 @@
-import path from 'path';
-import fs from 'fs';
 import _ from 'lodash';
-
-const getFileName = (cliArgument) => path.parse(cliArgument).base;
-
-const getFilePath = (cliArgument) => {
-  const fileName = getFileName(cliArgument);
-  const currentPath = process.cwd();
-  return path.resolve(currentPath, path.parse(cliArgument).dir, fileName);
-};
+import { getFileName, getFileExtension, getFilePath } from './utils.js';
+import { toParseJSON, toParseYaml } from './parsers.js';
 
 const createObject = (file) => {
   const fileName = getFileName(file);
   const filePath = getFilePath(file, fileName);
-  return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+  const fileExtension = getFileExtension(filePath);
+
+  switch (fileExtension) {
+    case '.json':
+      return toParseJSON(filePath);
+    case '.yml':
+      return toParseYaml(filePath);
+    default:
+      return toParseJSON(filePath);
+  }
 };
 
 const findDifference = (obj1, obj2) => {
