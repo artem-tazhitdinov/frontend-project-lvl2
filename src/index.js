@@ -1,7 +1,5 @@
 import path from 'path';
-
 import fs from 'fs';
-
 import _ from 'lodash';
 
 const getFileName = (cliArgument) => path.parse(cliArgument).base;
@@ -22,8 +20,7 @@ const findDifference = (obj1, obj2) => {
   const result = {};
   const firstObjectKeys = Object.keys(obj1);
   const secondObjectKeys = Object.keys(obj2);
-  const allKeysOfObjects = _.uniq([...firstObjectKeys, ...secondObjectKeys]);
-  allKeysOfObjects.sort();
+  const allKeysOfObjects = _.union(firstObjectKeys, secondObjectKeys).sort();
 
   for (const key of allKeysOfObjects) {
     if (!Object.hasOwn(obj2, key)) {
