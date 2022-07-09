@@ -23,10 +23,3 @@ test('main1', async () => {
 
   expect(actual).toEqual(plain);
 });
-
-test('main2', async () => {
-  const actual = genDiff(file2, file1);
-  const plain = readFile('plain2.txt');
-
-  expect(actual).toEqual(plain);
-});
