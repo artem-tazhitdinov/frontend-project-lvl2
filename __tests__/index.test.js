@@ -9,24 +9,30 @@ const __dirname = dirname(__filename);
 const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
 const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
 
-let file1;
-let file2;
+let jsonFile1;
+let jsonFile2;
+
+let ymlFile1;
+let ymlFile2;
 
 beforeEach(() => {
-  file1 = getFixturePath('file1.json');
-  file2 = getFixturePath('file2.json');
+  jsonFile1 = getFixturePath('file1.json');
+  jsonFile2 = getFixturePath('file2.json');
+
+  ymlFile1 = getFixturePath('file1.yml');
+  ymlFile2 = getFixturePath('file2.yml');
 });
 
-test('main1', async () => {
-  const actual = genDiff(file1, file2);
-  const plain = readFile('plain1.txt');
+test('Testing work with JSON files', async () => {
+  const actual = genDiff(jsonFile1, jsonFile2);
+  const plain = readFile('jsonPlain.txt');
 
   expect(actual).toEqual(plain);
 });
 
-test('main2', async () => {
-  const actual = genDiff(file2, file1);
-  const plain = readFile('plain2.txt');
+test('Testing work with YAML files', async () => {
+  const actual = genDiff(ymlFile1, ymlFile2);
+  const plain = readFile('yamlPlain.txt');
 
   expect(actual).toEqual(plain);
 });

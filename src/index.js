@@ -1,21 +1,5 @@
 import _ from 'lodash';
-import { getFileName, getFileExtension, getFilePath } from './utils.js';
-import { toParseJSON, toParseYaml } from './parsers.js';
-
-const createObject = (file) => {
-  const fileName = getFileName(file);
-  const filePath = getFilePath(file, fileName);
-  const fileExtension = getFileExtension(filePath);
-
-  switch (fileExtension) {
-    case '.json':
-      return toParseJSON(filePath);
-    case '.yml':
-      return toParseYaml(filePath);
-    default:
-      return toParseJSON(filePath);
-  }
-};
+import { parseData } from './parsers.js';
 
 const findDifference = (obj1, obj2) => {
   const result = {};
@@ -47,8 +31,8 @@ const convertToString = (obj) => {
 };
 
 const genDiff = (filepath1, filepath2) => {
-  const objectOne = createObject(filepath1);
-  const objectTwo = createObject(filepath2);
+  const objectOne = parseData(filepath1);
+  const objectTwo = parseData(filepath2);
 
   const objectsDifference = findDifference(objectOne, objectTwo);
   const differenceString = convertToString(objectsDifference);
