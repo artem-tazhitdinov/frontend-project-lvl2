@@ -13,7 +13,9 @@ const findDifference = (obj1, obj2) => {
     } else if (!Object.hasOwn(obj2, key)) {
       result.push({ key, value: obj1[key], status: 'deleted' });
     } else if (obj1[key] !== obj2[key]) {
-      result.push({ key, value: obj2[key], oldValue: obj1[key], status: 'changed' });
+      result.push({
+        key, value: obj2[key], oldValue: obj1[key], status: 'changed',
+      });
     } else {
       result.push({ key, value: obj1[key], status: 'unchanged' });
     }
