@@ -1,8 +1,5 @@
 {
   "timeout": 20,
   "verbose": true,
-  "host": "hexlet.io",
-  "zobjKey" : {
-    "innerKey": "another inner value"
-  }
+  "host": "hexlet.io"
 }
