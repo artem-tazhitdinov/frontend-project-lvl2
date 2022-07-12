@@ -2,25 +2,28 @@ import _ from 'lodash';
 import { parseData } from './parsers.js';
 
 const findDifference = (obj1, obj2) => {
-  const result = {};
-  const firstObjectKeys = Object.keys(obj1);
-  const secondObjectKeys = Object.keys(obj2);
-  const allKeysOfObjects = _.union(firstObjectKeys, secondObjectKeys).sort();
+  const firstObjectEntries = Object.entries(obj1);
+  const secondObjectEntries = Object.entries(obj2);
+  const allEntriesOfObjects = _.union(firstObjectEntries, secondObjectEntries).sort();
 
-  for (const key of allKeysOfObjects) {
+  const result = allEntriesOfObjects.reduce((acc, [key, value]) => {
+    if (_.isObject(value)) {
+      return findDifference(obj1[key], obj2[key]);
+    }
     if (!Object.hasOwn(obj2, key)) {
-      result[`- ${key}`] = obj1[key];
+      acc[`- ${key}`] = obj1[key];
     } else if (Object.hasOwn(obj1, key) && Object.hasOwn(obj2, key)) {
       if (obj1[key] !== obj2[key]) {
-        result[`- ${key}`] = obj1[key];
-        result[`+ ${key}`] = obj2[key];
+        acc[`- ${key}`] = obj1[key];
+        acc[`+ ${key}`] = obj2[key];
       } else {
-        result[`  ${key}`] = obj1[key];
+        acc[`  ${key}`] = obj1[key];
       }
     } else {
-      result[`+ ${key}`] = obj2[key];
+      acc[`+ ${key}`] = obj2[key];
     }
-  }
+    return acc;
+  }, {});
   return result;
 };
 
