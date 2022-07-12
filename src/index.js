@@ -1,26 +1,30 @@
 import _ from 'lodash';
 import { parseData } from './parsers.js';
 
-const findDifference = (obj1, obj2) => {
-  const obj1Keys = Object.keys(obj1);
-  const obj2keys = Object.keys(obj2);
-  const objectsKeys = _.union(obj1Keys, obj2keys).sort();
+const findDifference = (object1, object2) => {
+  const iter = (obj1, obj2) => {
+    const obj1Keys = Object.keys(obj1);
+    const obj2keys = Object.keys(obj2);
+    const objectsKeys = _.union(obj1Keys, obj2keys).sort();
 
-  const result = [];
-  for (const key of objectsKeys) {
-    if (!Object.hasOwn(obj1, key)) {
-      result.push({ key, value: obj2[key], status: 'added' });
-    } else if (!Object.hasOwn(obj2, key)) {
-      result.push({ key, value: obj1[key], status: 'deleted' });
-    } else if (obj1[key] !== obj2[key]) {
-      result.push({
-        key, value: obj2[key], oldValue: obj1[key], status: 'changed',
-      });
-    } else {
-      result.push({ key, value: obj1[key], status: 'unchanged' });
-    }
-  }
-  return result;
+    const result = objectsKeys.reduce((acc, key) => {
+      if (!Object.hasOwn(obj1, key)) {
+        acc.push({ key, value: obj2[key], status: 'added' });
+      } else if (!Object.hasOwn(obj2, key)) {
+        acc.push({ key, value: obj1[key], status: 'deleted' });
+      } else if (obj1[key] !== obj2[key]) {
+        acc.push({
+          key, newValue: obj2[key], oldValue: obj1[key], status: 'changed',
+        });
+      } else {
+        acc.push({ key, value: obj1[key], status: 'unchanged' });
+      }
+      return acc;
+    }, []);
+
+    return [...result];
+  };
+  return iter(object1, object2);
 };
 /*
 const convertToString = (obj) => {
