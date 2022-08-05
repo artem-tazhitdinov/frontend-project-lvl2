@@ -23,16 +23,16 @@ beforeEach(() => {
   ymlFile2 = getFixturePath('file2.yml');
 });
 
-test('Testing work with JSON files', async () => {
+test('Testing stylish formatter work with JSON files', async () => {
   const actual = genDiff(jsonFile1, jsonFile2);
-  const plain = readFile('jsonPlain.txt');
+  const stylish = readFile('jsonStylish.txt');
 
-  expect(actual).toEqual(plain);
+  expect(actual).toEqual(stylish);
 });
 
 test('Testing work with YAML files', async () => {
   const actual = genDiff(ymlFile1, ymlFile2);
-  const plain = readFile('yamlPlain.txt');
+  const plain = readFile('yaml.txt');
 
   expect(actual).toEqual(plain);
 });
