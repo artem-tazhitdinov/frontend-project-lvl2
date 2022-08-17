@@ -1,10 +1,12 @@
-import formatStylish from './stylish.js';
-import formatPlain from './plain.js';
+import stylishFormat from './stylish.js';
+import plainFormat from './plain.js';
+import JsonFormat from './json.js';
 
 const getFormatting = (diff, formatName) => {
   const formatStyles = {
-    plain: formatPlain,
-    stylish: formatStylish,
+    json: JsonFormat,
+    plain: plainFormat,
+    stylish: stylishFormat,
   };
   const formatter = formatStyles[formatName];
   return formatter(diff);
