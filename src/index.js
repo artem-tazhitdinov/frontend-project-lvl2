@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import makeStylishFormat from './formatters/stylish.js';
 import { parseData } from './parsers.js';
+import getFormatting from './formatters/index.js';
 
 const findDifference = (obj1, obj2) => {
   const obj1Keys = Object.keys(obj1);
@@ -25,13 +25,13 @@ const findDifference = (obj1, obj2) => {
   return diffResult;
 };
 
-const genDiff = (filepath1, filepath2) => {
+const genDiff = (filepath1, filepath2, formatStyle = 'stylish') => {
   const objectOne = parseData(filepath1);
   const objectTwo = parseData(filepath2);
 
   const objectsDifference = findDifference(objectOne, objectTwo);
-  const getStylishDiff = makeStylishFormat(objectsDifference);
-  return getStylishDiff;
+  const getformatedDiff = getFormatting(objectsDifference, formatStyle);
+  return getformatedDiff;
 };
 
 export default genDiff;

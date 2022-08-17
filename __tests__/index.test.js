@@ -24,15 +24,29 @@ beforeEach(() => {
 });
 
 test('Testing stylish formatter work with JSON files', async () => {
-  const actual = genDiff(jsonFile1, jsonFile2);
-  const stylish = readFile('test_json.txt');
+  const actual = genDiff(jsonFile1, jsonFile2, 'stylish');
+  const stylish = readFile('test_stylish_format.txt');
 
   expect(actual).toEqual(stylish);
 });
 
-test('Testing work with YAML files', async () => {
-  const actual = genDiff(ymlFile1, ymlFile2);
-  const plain = readFile('test_yaml.txt');
+test('Testing stylish formatter work with YAML files', async () => {
+  const actual = genDiff(ymlFile1, ymlFile2, 'stylish');
+  const plain = readFile('test_stylish_format.txt');
+
+  expect(actual).toEqual(plain);
+});
+
+test('Testing plain formatter work with JSON files', async () => {
+  const actual = genDiff(jsonFile1, jsonFile2, 'plain');
+  const stylish = readFile('test_plain_format.txt');
+
+  expect(actual).toEqual(stylish);
+});
+
+test('Testing plain formatter work with YAML files', async () => {
+  const actual = genDiff(ymlFile1, ymlFile2, 'plain');
+  const plain = readFile('test_plain_format.txt');
 
   expect(actual).toEqual(plain);
 });
