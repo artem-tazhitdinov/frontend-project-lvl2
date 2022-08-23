@@ -2,36 +2,35 @@ import _ from 'lodash';
 import { parseData } from './parsers.js';
 import getFormatting from './formatters/index.js';
 
-const findDifference = (obj1, obj2) => {
-  const obj1Keys = Object.keys(obj1);
-  const obj2keys = Object.keys(obj2);
-  const objectsKeys = _.sortBy(_.union(obj1Keys, obj2keys));
+const findDifference = (objOne, objTwo) => {
+  const objOneKeys = Object.keys(objOne);
+  const objTwokeys = Object.keys(objTwo);
+  const objectsKeys = _.sortBy(_.union(objOneKeys, objTwokeys));
 
   const diffResult = objectsKeys.map((key) => {
-    if (!_.has(obj1, key)) {
-      return { key, value: obj2[key], status: 'added' };
+    if (!_.has(objOne, key)) {
+      return { key, value: objTwo[key], status: 'added' };
     }
-    if (!_.has(obj2, key)) {
-      return { key, value: obj1[key], status: 'removed' };
+    if (!_.has(objTwo, key)) {
+      return { key, value: objOne[key], status: 'removed' };
     }
-    if (obj1[key] === obj2[key]) {
-      return { key, value: obj1[key], status: 'unchanged' };
+    if (objOne[key] === objTwo[key]) {
+      return { key, value: objOne[key], status: 'unchanged' };
     }
-    if (_.isObject(obj1[key]) && _.isObject(obj2[key])) {
-      return { key, value: findDifference(obj1[key], obj2[key]), status: 'nested' };
+    if (_.isObject(objOne[key]) && _.isObject(objTwo[key])) {
+      return { key, value: findDifference(objOne[key], objTwo[key]), status: 'nested' };
     }
-    return { key, value: { previousValue: obj1[key], newValue: obj2[key] }, status: 'updated' };
+    return { key, value: { previousValue: objOne[key], newValue: objTwo[key] }, status: 'updated' };
   });
   return diffResult;
 };
 
-const genDiff = (filepath1, filepath2, formatStyle = 'stylish') => {
-  const objectOne = parseData(filepath1);
-  const objectTwo = parseData(filepath2);
+const genDiff = (filepathOne, filepathTwo, formatStyle = 'stylish') => {
+  const objectOne = parseData(filepathOne);
+  const objectTwo = parseData(filepathTwo);
 
   const objectsDifference = findDifference(objectOne, objectTwo);
-  const getformatedDiff = getFormatting(objectsDifference, formatStyle);
-  return getformatedDiff;
+  return getFormatting(objectsDifference, formatStyle);
 };
 
 export default genDiff;
