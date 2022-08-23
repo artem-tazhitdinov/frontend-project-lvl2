@@ -1,5 +1,5 @@
 import { getFilePath, readFile, getFileExtension } from './utils.js';
-import { parseData } from './parsers.js';
+import parseData from './parsers.js';
 import getFormatting from './formatters/index.js';
 import buildTree from './buildTree.js';
 
