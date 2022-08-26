@@ -1,16 +1,21 @@
-import { getFilePath, readFile, getFileExtension } from './utils.js';
-import parseData from './parsers.js';
+import path from 'path';
+import { readFileSync } from 'fs';
+import toParse from './parsers.js';
 import getFormatting from './formatters/index.js';
 import buildTree from './buildTree.js';
 
-const genDiff = (filepath1, filepath2, formatStyle = 'stylish') => {
-  const path1 = getFilePath(filepath1);
-  const object1 = parseData(readFile(path1), getFileExtension(filepath1));
+const readFile = (filePath) => readFileSync(filePath, 'utf8');
+const getFileExtension = (fileName) => path.extname(fileName).slice(1);
+const buildFullfilePath = (fileName) => path.resolve(process.cwd(), fileName);
 
-  const path2 = getFilePath(filepath2);
-  const object2 = parseData(readFile(path2), getFileExtension(filepath2));
+const genDiff = (filePath1, filePath2, formatStyle = 'stylish') => {
+  const path1 = buildFullfilePath(filePath1);
+  const data1 = toParse(readFile(path1), getFileExtension(filePath1));
 
-  const tree = buildTree(object1, object2);
+  const path2 = buildFullfilePath(filePath2);
+  const data2 = toParse(readFile(path2), getFileExtension(filePath2));
+
+  const tree = buildTree(data1, data2);
   return getFormatting(tree, formatStyle);
 };
 

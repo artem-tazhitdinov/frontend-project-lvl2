@@ -9,9 +9,9 @@ const __dirname = dirname(__filename);
 const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
 const readFile = (filename) => fs.readFileSync(getFixturePath(filename), 'utf-8');
 
-const sampleStylish = readFile('test_stylish_format.txt');
-const samplePlain = readFile('test_plain_format.txt');
-const sampleJson = readFile('test_json_format.txt');
+const resultStylish = readFile('test_stylish_format.txt');
+const resultPlain = readFile('test_plain_format.txt');
+const resultJson = readFile('test_json_format.txt');
 
 describe('Test for JSON', () => {
   const jsonFile1 = getFixturePath('file1.json');
@@ -19,17 +19,17 @@ describe('Test for JSON', () => {
 
   test('Testing stylish formatter work with JSON files', () => {
     const actual = genDiff(jsonFile1, jsonFile2, 'stylish');
-    expect(actual).toEqual(sampleStylish);
+    expect(actual).toEqual(resultStylish);
   });
 
   test('Testing plain formatter work with JSON files', () => {
     const actual = genDiff(jsonFile1, jsonFile2, 'plain');
-    expect(actual).toEqual(samplePlain);
+    expect(actual).toEqual(resultPlain);
   });
 
   test('Testing JSON formatter work', () => {
     const actual = genDiff(jsonFile1, jsonFile2, 'json');
-    expect(actual).toEqual(sampleJson);
+    expect(actual).toEqual(resultJson);
   });
 });
 
@@ -39,11 +39,11 @@ describe('Test for YML', () => {
 
   test('Testing stylish formatter work with YAML files', () => {
     const actual = genDiff(ymlFile1, ymlFile2, 'stylish');
-    expect(actual).toEqual(sampleStylish);
+    expect(actual).toEqual(resultStylish);
   });
 
   test('Testing plain formatter work with YAML files', () => {
     const actual = genDiff(ymlFile1, ymlFile2, 'plain');
-    expect(actual).toEqual(samplePlain);
+    expect(actual).toEqual(resultPlain);
   });
 });
