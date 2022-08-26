@@ -16,19 +16,19 @@ const makeValue = (value, depth) => {
 };
 
 const getStylishDiff = (diff, depth) => {
-  const items = diff.flatMap(({ key, value, status }) => {
+  const items = diff.flatMap(({ key, value, type }) => {
     const symbols = { added: '+ ', removed: '- ', unchanged: '  ' };
 
-    if (status === 'updated') {
-      return [insLine(key, makeValue(value.previousValue, depth + 1), symbols.removed, depth + 1),
-        insLine(key, makeValue(value.newValue, depth + 1), symbols.added, depth + 1)];
+    if (type === 'updated') {
+      return [insLine(key, makeValue(value.value1, depth + 1), symbols.removed, depth + 1),
+        insLine(key, makeValue(value.value2, depth + 1), symbols.added, depth + 1)];
     }
 
-    if (status === 'nested') {
+    if (type === 'complex') {
       return insLine(key, getStylishDiff(value, depth + 1), '  ', depth + 1);
     }
 
-    return insLine(key, makeValue(value, depth + 1), symbols[status], depth + 1);
+    return insLine(key, makeValue(value, depth + 1), symbols[type], depth + 1);
   });
   const body = items.join('\n');
 

@@ -5,18 +5,18 @@ const buildTree = (data1, data2) => {
 
   const diffTree = dataKeys.map((key) => {
     if (!_.has(data1, key)) {
-      return { key, value: data2[key], status: 'added' };
+      return { key, value: data2[key], type: 'added' };
     }
     if (!_.has(data2, key)) {
-      return { key, value: data1[key], status: 'removed' };
+      return { key, value: data1[key], type: 'removed' };
     }
     if (data1[key] === data2[key]) {
-      return { key, value: data1[key], status: 'unchanged' };
+      return { key, value: data1[key], type: 'unchanged' };
     }
     if (_.isObject(data1[key]) && _.isObject(data2[key])) {
-      return { key, value: buildTree(data1[key], data2[key]), status: 'nested' };
+      return { key, value: buildTree(data1[key], data2[key]), type: 'complex' };
     }
-    return { key, value: { previousValue: data1[key], newValue: data2[key] }, status: 'updated' };
+    return { key, value: { value1: data1[key], value2: data2[key] }, type: 'updated' };
   });
 
   return diffTree;

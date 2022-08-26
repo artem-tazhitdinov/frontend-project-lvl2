@@ -11,23 +11,23 @@ const makeValue = (value) => {
 };
 
 const makePlainFormat = (diff, path = []) => {
-  const filteredDiff = diff.filter((item) => item.status !== 'unchanged');
+  const filteredDiff = diff.filter((item) => item.type !== 'unchanged');
   const result = filteredDiff.map((item) => {
     const newPath = path.concat(item.key);
     const node = newPath.join('.');
 
-    if (item.status === 'removed') {
+    if (item.type === 'removed') {
       return `Property '${node}' was removed`;
     }
 
-    if (item.status === 'added') {
+    if (item.type === 'added') {
       const val = makeValue(item.value);
       return `Property '${node}' was added with value: ${val}`;
     }
 
-    if (item.status === 'updated') {
-      const oldVal = makeValue(item.value.previousValue);
-      const newVal = makeValue(item.value.newValue);
+    if (item.type === 'updated') {
+      const oldVal = makeValue(item.value.value1);
+      const newVal = makeValue(item.value.value2);
       return `Property '${node}' was updated. From ${oldVal} to ${newVal}`;
     }
 
