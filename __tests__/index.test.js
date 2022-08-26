@@ -17,6 +17,11 @@ describe('Test for JSON', () => {
   const jsonFile1 = getFixturePath('file1.json');
   const jsonFile2 = getFixturePath('file2.json');
 
+  test('Testing JSON parsing', () => {
+    const parseJson = () => genDiff(jsonFile1, jsonFile2, 'json');
+    expect(parseJson).not.toThrowError();
+  });
+
   test('Testing stylish formatter work with JSON files', () => {
     const actual = genDiff(jsonFile1, jsonFile2, 'stylish');
     expect(actual).toEqual(resultStylish);
