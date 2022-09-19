@@ -17,9 +17,9 @@ describe('Test for JSON', () => {
   const jsonFile1 = getFixturePath('file1.json');
   const jsonFile2 = getFixturePath('file2.json');
 
-  test('Testing JSON parsing', () => {
-    const parseJson = () => genDiff(jsonFile1, jsonFile2, 'json');
-    expect(parseJson).not.toThrowError();
+  test('Testing default formatter', () => {
+    const actual = genDiff(jsonFile1, jsonFile2);
+    expect(actual).toEqual(resultStylish);
   });
 
   test('Testing stylish formatter work with JSON files', () => {
@@ -30,6 +30,11 @@ describe('Test for JSON', () => {
   test('Testing plain formatter work with JSON files', () => {
     const actual = genDiff(jsonFile1, jsonFile2, 'plain');
     expect(actual).toEqual(resultPlain);
+  });
+
+  test('Testing JSON parsing', () => {
+    const parseJson = () => genDiff(jsonFile1, jsonFile2, 'json');
+    expect(parseJson).not.toThrowError();
   });
 
   test('Testing JSON formatter work', () => {

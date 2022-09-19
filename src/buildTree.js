@@ -1,8 +1,8 @@
 import _ from 'lodash';
 
 const buildTree = (data1, data2) => {
-  const dataKeys = _.sortBy(_.union(Object.keys(data1), Object.keys(data2)));
-  return dataKeys.map((key) => {
+  const keys = _.sortBy(_.union(Object.keys(data1), Object.keys(data2)));
+  return keys.map((key) => {
     if (!_.has(data1, key)) {
       return { key, value: data2[key], type: 'added' };
     }
