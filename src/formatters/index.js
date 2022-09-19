@@ -1,13 +1,9 @@
 import stylishFormat from './stylish.js';
 import plainFormat from './plain.js';
-import JsonFormat from './json.js';
+
+const formatStyles = { json: JSON.stringify, plain: plainFormat, stylish: stylishFormat };
 
 const format = (diff, formatName) => {
-  const formatStyles = {
-    json: JsonFormat,
-    plain: plainFormat,
-    stylish: stylishFormat,
-  };
   const formatter = formatStyles[formatName];
   return formatter(diff);
 };
