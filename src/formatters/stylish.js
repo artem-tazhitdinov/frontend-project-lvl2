@@ -1,40 +1,52 @@
 import _ from 'lodash';
 
-const newLine = (depth) => `  ${' '.repeat(4).repeat(depth - 1)}`;
-const bracket = (depth) => `${' '.repeat(4).repeat(depth)}`;
-const insLine = (key, value, char, depth) => `${newLine(depth)}${char}${key}: ${value}`;
-const bracketsWrap = (body, depth) => `{\n${body}\n${bracket(depth)}}`;
+const indent = (depth, spacesCount = 4) => ' '.repeat(depth * spacesCount - 2);
 
-const stringify = (value, depth) => {
-  if (!_.isObject(value)) {
-    return value;
-  }
-  const entries = Object.entries(value);
-  const items = entries.map(([key, val]) => insLine(key, stringify(val, depth + 1), '  ', depth + 1));
-  const body = items.join('\n');
-  return bracketsWrap(body, depth);
+const stringify = (obj, depth = 0) => {
+  const iter = (currentValue, currentDepth) => {
+    if (!_.isPlainObject(currentValue)) {
+      return String(currentValue);
+    }
+
+    const result = Object.entries(currentValue).map(([key, value]) => {
+      const beginSpace = indent(currentDepth + 1);
+      return `${beginSpace}  ${key}: ${stringify(value, currentDepth + 1)}`;
+    });
+
+    const endSpace = indent(currentDepth);
+    return `{\n${result.join('\n')}\n  ${endSpace}}`;
+  };
+
+  return iter(obj, depth);
 };
 
-const getStylishDiff = (diff, depth) => {
-  const items = diff.flatMap(({ key, value, type }) => {
-    const symbols = { added: '+ ', removed: '- ', unchanged: '  ' };
+const getStylishDiff = (diff, depth = 1) => {
+  const types = {
+    complex: ({ key, children }) => {
+      const child = getStylishDiff(children, depth + 1);
+      return `  ${indent(depth)}${key}: {\n${child}\n${indent(depth)}  }`;
+    },
 
-    if (type === 'updated') {
-      return [insLine(key, stringify(value.value1, depth + 1), symbols.removed, depth + 1),
-        insLine(key, stringify(value.value2, depth + 1), symbols.added, depth + 1)];
-    }
+    unchanged: ({ key, value }) => `${indent(depth)}  ${key}: ${stringify(value, depth)}`,
 
-    if (type === 'complex') {
-      return insLine(key, getStylishDiff(value, depth + 1), '  ', depth + 1);
-    }
+    added: ({ key, value }) => `${indent(depth)}+ ${key}: ${stringify(value, depth)}`,
 
-    return insLine(key, stringify(value, depth + 1), symbols[type], depth + 1);
+    removed: ({ key, value }) => `${indent(depth)}- ${key}: ${stringify(value, depth)}`,
+
+    updated: ({ key, value2, value1 }) => {
+      const added = `${indent(depth)}+ ${key}: ${stringify(value2, depth)}`;
+      const removed = `${indent(depth)}- ${key}: ${stringify(value1, depth)}`;
+      return `${removed}\n${added}`;
+    },
+  };
+
+  const result = diff.map((node) => {
+    const { type } = node;
+    return types[type](node, depth);
   });
-  const body = items.join('\n');
 
-  return bracketsWrap(body, depth);
+  return result.join('\n');
 };
 
-const makeStylishFormat = (diff) => getStylishDiff(diff, 0);
-
+const makeStylishFormat = (diff) => `{\n${getStylishDiff(diff)}\n}`;
 export default makeStylishFormat;

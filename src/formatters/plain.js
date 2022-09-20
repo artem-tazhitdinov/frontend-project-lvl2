@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const makeValue = (value) => {
+const makeStringify = (value) => {
   if (_.isObject(value)) {
     return '[complex value]';
   }
@@ -10,31 +10,24 @@ const makeValue = (value) => {
   return value;
 };
 
-const makePlainFormat = (diff, path = []) => {
-  const filteredDiff = diff.filter((item) => item.type !== 'unchanged');
-  const result = filteredDiff.map((item) => {
-    const newPath = path.concat(item.key);
-    const node = newPath.join('.');
+const makePlainFormat = (diff, root = []) => {
+  const types = {
+    added: ({ value }, path) => `Property '${path.join('.')}' was added with value: ${makeStringify(value)}`,
+    removed: (empty, path) => `Property '${path.join('.')}' was removed`,
+    updated: ({ value2, value1 }, path) => (
+      `Property '${path.join('.')}' was updated. From ${makeStringify(value1)} to ${makeStringify(value2)}`),
+    complex: ({ children }, path) => makePlainFormat(children, path),
+    unchanged: () => null,
+  };
 
-    if (item.type === 'removed') {
-      return `Property '${node}' was removed`;
-    }
+  const plainDiff = diff.map((node) => {
+    const { key, type } = node;
+    const newPath = [...root, key];
+    return types[type](node, newPath);
+  });
 
-    if (item.type === 'added') {
-      const val = makeValue(item.value);
-      return `Property '${node}' was added with value: ${val}`;
-    }
-
-    if (item.type === 'updated') {
-      const oldVal = makeValue(item.value.value1);
-      const newVal = makeValue(item.value.value2);
-      return `Property '${node}' was updated. From ${oldVal} to ${newVal}`;
-    }
-
-    return makePlainFormat(item.value, newPath);
-  }).join('\n');
-
-  return result;
+  const result = _.compact(_.flatten(plainDiff));
+  return result.join('\n');
 };
 
 export default makePlainFormat;

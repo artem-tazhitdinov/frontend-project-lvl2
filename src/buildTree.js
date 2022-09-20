@@ -10,12 +10,14 @@ const buildTree = (data1, data2) => {
       return { key, value: data1[key], type: 'removed' };
     }
     if (_.isPlainObject(data1[key]) && _.isPlainObject(data2[key])) {
-      return { key, value: buildTree(data1[key], data2[key]), type: 'complex' };
+      return { key, children: buildTree(data1[key], data2[key]), type: 'complex' };
     }
     if (_.isEqual(data1[key], data2[key])) {
       return { key, value: data1[key], type: 'unchanged' };
     }
-    return { key, value: { value1: data1[key], value2: data2[key] }, type: 'updated' };
+    return {
+      key, value1: data1[key], value2: data2[key], type: 'updated',
+    };
   });
 };
 
