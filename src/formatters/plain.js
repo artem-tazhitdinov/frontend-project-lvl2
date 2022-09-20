@@ -17,7 +17,7 @@ const makePlainFormat = (diff, root = []) => {
     updated: ({ value2, value1 }, path) => (
       `Property '${path.join('.')}' was updated. From ${makeStringify(value1)} to ${makeStringify(value2)}`),
     complex: ({ children }, path) => makePlainFormat(children, path),
-    unchanged: () => null,
+    unchanged: () => '',
   };
 
   const plainDiff = diff.map((node) => {
